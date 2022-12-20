@@ -40,6 +40,6 @@ func (e *EngimaMachine) rotateRotars() {
 }
 
 func NewEnigmaMachine() *EngimaMachine {
-	enigma := EngimaMachine{Right: NewRotor("I", firstRotorEncoding,2), Middle: NewRotor("II", secondRotorEncoding,25), Left: NewRotor("III", thirdRotorEncoding,24), Reflector: NewReflector()}
+	enigma := EngimaMachine{Right: NewRotor("I", firstRotorEncoding,1,1), Middle: NewRotor("II", secondRotorEncoding,1,25), Left: NewRotor("III", thirdRotorEncoding,1,13), Reflector: NewReflector()}
 	return &enigma
 }
