@@ -7,9 +7,9 @@ const (
 )
 
 type EngimaMachine struct {
-	I         *Rotor
-	II        *Rotor
-	III       *Rotor
+	Right     *Rotor
+	Middle    *Rotor
+	Left      *Rotor
 	Reflector *Reflector
 }
 
@@ -23,18 +23,23 @@ func (e *EngimaMachine) EncodeDecodeText(text string) string {
 }
 
 func (e *EngimaMachine) encodeDecodeLetter(letter rune) rune {
+	e.rotateRotars()
 	char := letter - 65
-	char = e.I.encodeForward(char)
-	char = e.II.encodeForward(char)
-	char = e.III.encodeForward(char)
+	char = e.Right.encodeForward(char)
+	char = e.Middle.encodeForward(char)
+	char = e.Left.encodeForward(char)
 	char = e.Reflector.Reflect(char)
-	char = e.III.encodeReverse(char)
-	char = e.II.encodeReverse(char)
-	char = e.I.encodeReverse(char)
+	char = e.Left.encodeReverse(char)
+	char = e.Middle.encodeReverse(char)
+	char = e.Right.encodeReverse(char)
 	return char + 65
 }
 
+func (e *EngimaMachine) rotateRotars() {
+	e.Right.rotate()
+}
+
 func NewEnigmaMachine() *EngimaMachine {
-	enigma := EngimaMachine{I: NewRotor("I", firstRotorEncoding), II: NewRotor("II", secondRotorEncoding), III: NewRotor("III", thirdRotorEncoding), Reflector: NewReflector()}
+	enigma := EngimaMachine{Right: NewRotor("I", firstRotorEncoding,2), Middle: NewRotor("II", secondRotorEncoding,25), Left: NewRotor("III", thirdRotorEncoding,24), Reflector: NewReflector()}
 	return &enigma
 }

@@ -1,11 +1,13 @@
 package machine
 
+
 type Reflector struct {
 	encoding string
 	wiring   [26]int32
 }
 
 func (r *Reflector) Reflect(input int32) int32 {
+	//fmt.Println("Reflect: ", input,"->",r.wiring[input])
 	return r.wiring[input]
 }
 

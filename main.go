@@ -6,9 +6,10 @@ import (
 )
 
 func main() {
-	enigma := machine.NewEnigmaMachine()
-	original := "HELLOWORLD"
-	encoded := enigma.EncodeDecodeText(original)
-	decoded := enigma.EncodeDecodeText(encoded)
+	encoderEnigma := machine.NewEnigmaMachine()
+	decoderEnigma := machine.NewEnigmaMachine()
+	original := "THEQUICKBROWNFOXJUMPSOVERTHELAZYDOGS"
+	encoded := encoderEnigma.EncodeDecodeText(original)
+	decoded := decoderEnigma.EncodeDecodeText(encoded)
 	fmt.Println(original, "->", encoded, "->", decoded)
 }
