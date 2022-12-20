@@ -1,6 +1,5 @@
 package machine
 
-
 type Reflector struct {
 	encoding string
 	wiring   [26]int32

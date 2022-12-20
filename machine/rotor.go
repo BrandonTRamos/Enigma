@@ -1,17 +1,17 @@
 package machine
 
-
 type Rotor struct {
-	name                string
-	encoding            string
-	forwardWiring       [26]int32
-	reverseWiring       [26]int32
-	rotorPositionOffset int32
-	ringSettingOffset   int32
+	name          string
+	encoding      string
+	forwardWiring [26]int32
+	reverseWiring [26]int32
+	rotorPosition int32
+	ringSetting   int32
+	rotationPoint int32
 }
 
-func NewRotor(name string, encoding string,rotorPositionOffset int32,ringSettingOffset int32) *Rotor {
-	rotor := Rotor{name: name, encoding: encoding,ringSettingOffset: ringSettingOffset,rotorPositionOffset: rotorPositionOffset}
+func NewRotor(name string, encoding string, rotorPositionOffset int32, ringSettingOffset int32, rotationPoint int32) *Rotor {
+	rotor := Rotor{name: name, encoding: encoding, ringSetting: ringSettingOffset, rotorPosition: rotorPositionOffset, rotationPoint: rotationPoint}
 	rotor.generateForwardWiring()
 	rotor.generateReverseWiring()
 	return &rotor
@@ -29,20 +29,20 @@ func (r *Rotor) generateReverseWiring() {
 }
 
 func (r *Rotor) rotate() {
-	r.rotorPositionOffset = (26 + (r.rotorPositionOffset+1)) % 26
+	r.rotorPosition = (26 + (r.rotorPosition + 1)) % 26
 }
 
 func (r *Rotor) encodeForward(input int32) int32 {
 
-	offset:=((26+(r.rotorPositionOffset-r.ringSettingOffset)))%26
+	offset := (26 + (r.rotorPosition - r.ringSetting)) % 26
 	return r.forwardWiring[(input+offset)%26]
 }
 
 func (r *Rotor) encodeReverse(input int32) int32 {
-	offset:=((26+(r.rotorPositionOffset-r.ringSettingOffset)))%26
-	return (26+(r.reverseWiring[input])-offset)%26
+	offset := (26 + (r.rotorPosition - r.ringSetting)) % 26
+	return (26 + (r.reverseWiring[input]) - offset) % 26
 }
 
 func (r *Rotor) GetCurrentRotorOffset() int32 {
-	return r.rotorPositionOffset
+	return r.rotorPosition
 }
