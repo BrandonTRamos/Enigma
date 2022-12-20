@@ -52,5 +52,8 @@ func NewEnigmaMachine() *EngimaMachine {
 	enigma.PlugBoard=NewPlugBoard()
 	enigma.PlugBoard.addMappingPair('A','Z')
 	enigma.PlugBoard.addMappingPair('B','E')
+	enigma.PlugBoard.addMappingPair('C','J')
+	enigma.PlugBoard.addMappingPair('D','X')
+	enigma.PlugBoard.addMappingPair('F','Q')
 	return &enigma
 }

@@ -11,5 +11,5 @@ func main() {
 	original := "THEQUICKBROWNFOXJUMPSOVERTHELAZYDOGS"
 	encoded := encoderEnigma.EncodeDecodeText(original)
 	decoded := decoderEnigma.EncodeDecodeText(encoded)
-	fmt.Println(original, "->", encoded, "->", decoded)
+	fmt.Println("Original Message:",original, "->","Encoded Message:", encoded, "->","Decoded Message:" ,decoded)
 }
