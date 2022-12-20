@@ -1,3 +1,3 @@
-module github.com/BrandonTRamos/Enigma
+module Enigma
 
 go 1.19
