@@ -27,6 +27,25 @@ func ringSettingAttack(encodedText string, topResult *AttackPermutationResult){
 
 }
 
+func plugboardAttack(encodedText string, topResult *AttackPermutationResult){
+
+}
+
+func generatePossibleWiringCombos()[] string{
+	combos:= make([]string,325)
+	alphabet := "ABCDEFGHIJKLMNOPQRSTUVWXYZ"
+	
+	for i := 0; i < 25; i++ {
+		for j := i + 1; j < 26; j++ {
+			fmt.Printf("%s,%s\n", string(rune(alphabet[i])), string(rune(alphabet[j])))
+			pair:=string(rune(alphabet[i]))+string(rune(alphabet[j]))
+			combos=append(combos, pair)
+		}
+	}
+
+	return combos;
+}
+
 func orderAndPositionAttack(encodedText string) *AttackPermutationResult{
 	resultChannel := make(chan *AttackPermutationResult)
 	var bestResults []*AttackPermutationResult
