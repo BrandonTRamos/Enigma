@@ -3,7 +3,6 @@ package attack
 import (
 	"Enigma/machine"
 	"sort"
-	"sync"
 )
 
 type RotorSummary struct {
@@ -18,8 +17,7 @@ type AttackPermutationResult struct {
 	DecodedText string
 }
 
-func Attack(text string, order string, wg *sync.WaitGroup) *AttackPermutationResult {
-	defer wg.Done()
+func Attack(text string, order string, resultChannel chan *AttackPermutationResult) {
 	results := intializeResultArray()
 	enigma := machine.NewEnigmaMachineRotorOrder(order)
 	for i := 0; i < 26; i++ {
@@ -48,7 +46,7 @@ func Attack(text string, order string, wg *sync.WaitGroup) *AttackPermutationRes
 			}
 		}
 	}
-	return results[0]
+	resultChannel <- results[0]
 }
 
 func intializeResultArray() [10]*AttackPermutationResult {
