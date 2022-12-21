@@ -2,14 +2,17 @@ package main
 
 import (
 	"Enigma/machine"
+	"Enigma/machine/attack"
 	"fmt"
+	"sync"
 )
 
 func main() {
-	encoderEnigma := machine.NewEnigmaMachine()
-	decoderEnigma := machine.NewEnigmaMachine()
-	original := "THEQUICKBROWNFOXJUMPSOVERTHELAZYDOGS"
-	encoded := encoderEnigma.EncodeDecodeText(original)
-	decoded := decoderEnigma.EncodeDecodeText(encoded)
-	fmt.Println("Original Message:",original, "->","Encoded Message:", encoded, "->","Decoded Message:" ,decoded)
+	wg := new(sync.WaitGroup)
+	fmt.Println("Running...")
+	for _, order := range machine.PossibleRotarOrders {
+		wg.Add(1)
+		go attack.Attack(order,wg)
+	}
+	wg.Wait()
 }
