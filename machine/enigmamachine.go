@@ -3,13 +3,13 @@ package machine
 import "strings"
 
 const (
-	firstRotorEncoding  = "EKMFLGDQVZNTOWYHXUSPAIBRCJ"
-	secondRotorEncoding = "AJDKSIRUXBLHWTMCQGZNPYFVOE"
-	thirdRotorEncoding  = "BDFHJLCPRTXVZNYEIWGAKMUSQO"
+	FirstRotorEncoding  = "EKMFLGDQVZNTOWYHXUSPAIBRCJ"
+	SecondRotorEncoding = "AJDKSIRUXBLHWTMCQGZNPYFVOE"
+	ThirdRotorEncoding  = "BDFHJLCPRTXVZNYEIWGAKMUSQO"
 )
 
 var PossibleRotarOrders []string = []string{"III,II,I", "III,I,II", "II,III,I", "II,I,III", "I,III,II", "I,II,III"}
-var RotorNumberEncodingMap map[string]string = map[string]string{"I": firstRotorEncoding, "II": secondRotorEncoding, "III": thirdRotorEncoding}
+var RotorNumberEncodingMap map[string]string = map[string]string{"I": FirstRotorEncoding, "II": SecondRotorEncoding, "III": ThirdRotorEncoding}
 
 type EngimaMachine struct {
 	Right     *Rotor
@@ -21,19 +21,19 @@ type EngimaMachine struct {
 
 func NewEnigmaMachineRotorOrder(rotorOrder string) *EngimaMachine {
 	split := strings.Split(rotorOrder, ",")
-	enigma := EngimaMachine{Right: NewRotorFromName(split[2]), Middle: NewRotorFromName(split[1]), Left: NewRotorFromName(split[0]),Reflector: NewReflector()}
+	enigma := EngimaMachine{Right: NewRotorFromName(split[2]), Middle: NewRotorFromName(split[1]), Left: NewRotorFromName(split[0]), Reflector: NewReflector()}
 	enigma.PlugBoard = NewPlugBoard()
 	return &enigma
 }
 
 func NewEnigmaMachineTest() *EngimaMachine {
-	enigma := EngimaMachine{Right: NewRotor("I", firstRotorEncoding, 25, 1, 16), Middle: NewRotor("II", secondRotorEncoding, 1, 25, 4), Left: NewRotor("III", thirdRotorEncoding, 1, 13, 21), Reflector: NewReflector()}
+	enigma := EngimaMachine{Right: NewRotor("I", FirstRotorEncoding, 25, 1, 16), Middle: NewRotor("II", SecondRotorEncoding, 1, 25, 4), Left: NewRotor("III", ThirdRotorEncoding, 1, 13, 21), Reflector: NewReflector()}
 	enigma.PlugBoard = NewPlugBoard()
 	enigma.PlugBoard.addMappingPair('A', 'Z')
 	enigma.PlugBoard.addMappingPair('B', 'E')
 	enigma.PlugBoard.addMappingPair('C', 'J')
-	enigma.PlugBoard.addMappingPair('D', 'X')
-	enigma.PlugBoard.addMappingPair('F', 'Q')
+	// enigma.PlugBoard.addMappingPair('D', 'X')
+	// enigma.PlugBoard.addMappingPair('F', 'Q')
 	return &enigma
 }
 
@@ -62,7 +62,7 @@ func (e *EngimaMachine) encodeDecodeLetter(letter rune) rune {
 
 func (e *EngimaMachine) rotateRotars() {
 	e.Right.rotate()
-	if e.Right.rotorPosition == e.Right.rotationPoint {
+	if e.Right.RotorPosition == e.Right.RotationPoint {
 		e.Middle.rotate()
 		// if(e.Middle.rotorPosition==e.Middle.rotationPoint){
 		// 	e.Left.rotate()
