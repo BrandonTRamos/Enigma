@@ -2,6 +2,7 @@ package attack
 
 import (
 	"Enigma/machine"
+	"fmt"
 	"sort"
 )
 
@@ -17,7 +18,34 @@ type AttackPermutationResult struct {
 	DecodedText string
 }
 
-func Attack(text string, order string, resultChannel chan *AttackPermutationResult) {
+func Attack(encodedText string) {
+	topResult:=orderAndPositionAttack(encodedText)
+	ringSettingAttack(encodedText,topResult)
+}
+
+func ringSettingAttack(encodedText string, topResult *AttackPermutationResult){
+
+}
+
+func orderAndPositionAttack(encodedText string) *AttackPermutationResult{
+	resultChannel := make(chan *AttackPermutationResult)
+	var bestResults []*AttackPermutationResult
+	for _, order := range machine.PossibleRotarOrders {
+		go bruteForceOrderAndPositions(encodedText, order, resultChannel)
+
+	}
+	for i := 0; i < len(machine.PossibleRotarOrders); i++ {
+		result := <-resultChannel
+		bestResults = append(bestResults, result)
+	}
+	close(resultChannel)
+
+	SortArrayDesc(bestResults)
+	printBestResult(bestResults)
+	return bestResults[0]
+}
+
+func bruteForceOrderAndPositions(text string, order string, resultChannel chan *AttackPermutationResult){
 	results := intializeResultArray()
 	enigma := machine.NewEnigmaMachineRotorOrder(order)
 	for i := 0; i < 26; i++ {
@@ -61,4 +89,14 @@ func SortArrayDesc(results []*AttackPermutationResult) {
 	sort.Slice(results, func(i, j int) bool {
 		return results[j].IOC < results[i].IOC
 	})
+}
+
+func printBestResult(bestResults []*AttackPermutationResult){
+	fmt.Println("Top Result:")
+	fmt.Printf("IOC: %#v, ", bestResults[0].IOC)
+	fmt.Printf("%+v, ", bestResults[0].Rotors[0])
+	fmt.Printf("%+v, ", bestResults[0].Rotors[1])
+	fmt.Printf("%+v\n\n", bestResults[0].Rotors[2])
+	fmt.Println("Decoded Text:")
+	fmt.Println(bestResults[0].DecodedText)
 }

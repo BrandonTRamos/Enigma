@@ -29,11 +29,11 @@ func NewEnigmaMachineRotorOrder(rotorOrder string) *EngimaMachine {
 func NewEnigmaMachineTest() *EngimaMachine {
 	enigma := EngimaMachine{Right: NewRotor("I", FirstRotorEncoding, 25, 1, 16), Middle: NewRotor("II", SecondRotorEncoding, 1, 25, 4), Left: NewRotor("III", ThirdRotorEncoding, 1, 13, 21), Reflector: NewReflector()}
 	enigma.PlugBoard = NewPlugBoard()
-	enigma.PlugBoard.addMappingPair('A', 'Z')
-	enigma.PlugBoard.addMappingPair('B', 'E')
-	enigma.PlugBoard.addMappingPair('C', 'J')
-	enigma.PlugBoard.addMappingPair('D', 'X')
-	enigma.PlugBoard.addMappingPair('F', 'Q')
+	// enigma.PlugBoard.addMappingPair('A', 'Z')
+	// enigma.PlugBoard.addMappingPair('B', 'E')
+	// enigma.PlugBoard.addMappingPair('C', 'J')
+	// enigma.PlugBoard.addMappingPair('D', 'X')
+	// enigma.PlugBoard.addMappingPair('F', 'Q')
 	return &enigma
 }
 
@@ -64,8 +64,8 @@ func (e *EngimaMachine) rotateRotars() {
 	e.Right.rotate()
 	if e.Right.RotorPosition == e.Right.RotationPoint {
 		e.Middle.rotate()
-		// if(e.Middle.rotorPosition==e.Middle.rotationPoint){
-		// 	e.Left.rotate()
-		// }
+		if(e.Middle.RotorPosition==e.Middle.RotationPoint){
+			e.Left.rotate()
+		}
 	}
 }

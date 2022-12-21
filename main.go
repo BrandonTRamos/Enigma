@@ -13,31 +13,7 @@ func main() {
 	fmt.Println("Running...")
 	encoderEnigma := machine.NewEnigmaMachineTest()
 	encodedText := encoderEnigma.EncodeDecodeText(enigmafyText(plainText))
-	resultChannel := make(chan *attack.AttackPermutationResult)
-	var bestResults []*attack.AttackPermutationResult
-	for _, order := range machine.PossibleRotarOrders {
-		go attack.Attack(encodedText, order, resultChannel)
-
-	}
-	for i := 0; i < len(machine.PossibleRotarOrders); i++ {
-		result := <-resultChannel
-		bestResults = append(bestResults, result)
-	}
-	close(resultChannel)
-
-	attack.SortArrayDesc(bestResults)
-	printBestResult(bestResults)
-
-}
-
-func printBestResult(bestResults []*attack.AttackPermutationResult){
-	fmt.Println("Top Result:")
-	fmt.Printf("IOC: %#v, ", bestResults[0].IOC)
-	fmt.Printf("%+v, ", bestResults[0].Rotors[0])
-	fmt.Printf("%+v, ", bestResults[0].Rotors[1])
-	fmt.Printf("%+v\n\n", bestResults[0].Rotors[2])
-	fmt.Println("Decoded Text:")
-	fmt.Println(bestResults[0].DecodedText)
+	attack.Attack(encodedText)
 }
 
 func enigmafyText(text string) string {
