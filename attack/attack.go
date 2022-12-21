@@ -14,58 +14,83 @@ type RotorSummary struct {
 
 type AttackPermutationResult struct {
 	IOC         float32
-	Order string
+	Order       string
 	Rotors      [3]*RotorSummary
 	PlugSummary string
 	DecodedText string
 }
 
+type PlugboardResult struct {
+	IOC  float32
+	pairs string
+}
+
 func Attack(encodedText string) {
 	fmt.Println("===========")
 	fmt.Println("Initiating order and position attack")
-	topResult:=orderAndPositionAttack(encodedText)
-	ringSettingAttack(encodedText,topResult)
+	topResult := orderAndPositionAttack(encodedText)
+	ringSettingAttack(encodedText, topResult)
 	fmt.Println("===========")
 	fmt.Println("Initiating plugboard attack")
-	plugboardAttack(encodedText,topResult)
+	plugboardAttack(encodedText, topResult)
 }
 
-func ringSettingAttack(encodedText string, topResult *AttackPermutationResult){
+func ringSettingAttack(encodedText string, topResult *AttackPermutationResult) {
 
 }
 
-func plugboardAttack(encodedText string, topResult *AttackPermutationResult){
+func plugboardAttack(encodedText string, topResult *AttackPermutationResult) *PlugboardResult {
 	wiringCombos:=generatePossibleWiringCombos()
+	intialPlugBoardResult:= &PlugboardResult{IOC: topResult.IOC,pairs: ""}
 	enigma := machine.NewEnigmaMachineRotorOrder(topResult.Order)
-	baseIoc:=topResult.IOC
-	for _,pair:=range wiringCombos{
-		enigma.SetRotorPositions(topResult.Rotors[0].Position,topResult.Rotors[1].Position,topResult.Rotors[2].Position)
-		enigma.GenerateNewPlugboardFromSinglePair(pair)
-		decodedText:=enigma.EncodeDecodeText(encodedText)
-		ioc:=CalcIndexOfCooincidence(decodedText)
+	runPlugBoardAttack(encodedText,intialPlugBoardResult,wiringCombos,enigma,topResult,0)
+	fmt.Printf("%+v\n",intialPlugBoardResult)
+	return nil
+}
 
-		if ioc>baseIoc{
-			fmt.Println("Pair found: ",pair,"Base IOC:",baseIoc,"New IOC:",ioc)
+func runPlugBoardAttack(encodedText string, plugboardResult *PlugboardResult, wiringCombos []string, enigma *machine.EngimaMachine, topResult *AttackPermutationResult, depth int) {
+	if depth>1{
+		return
+	}
+	intialPairs:=plugboardResult.pairs
+	enigma.GeneratePlugBoardFromInitalPairs(intialPairs)
+	for _, pair := range wiringCombos {
+		enigma.SetRotorPositions(topResult.Rotors[0].Position, topResult.Rotors[1].Position, topResult.Rotors[2].Position)
+		enigma.AddPlugboardPair(pair)
+		decodedText := enigma.EncodeDecodeText(encodedText)
+		enigma.RemovePlugboardPair(pair)
+		ioc := CalcIndexOfCooincidence(decodedText)
+
+		if (ioc > plugboardResult.IOC)&&(ioc<.065) {
+			fmt.Println("Pair found: ", pair, "Base IOC:", plugboardResult.IOC, "New IOC:", ioc)
+			plugboardResult.IOC=ioc
+			if intialPairs==""{
+				plugboardResult.pairs=pair
+			}else{
+				plugboardResult.pairs=intialPairs+","+pair
+			}
+			
 		}
 
 	}
+	runPlugBoardAttack(encodedText,plugboardResult,wiringCombos,enigma,topResult,depth+1)
 }
 
-func generatePossibleWiringCombos()[] string{
-	combos:= make([]string,0,325)
+func generatePossibleWiringCombos() []string {
+	combos := make([]string, 0, 325)
 	alphabet := "ABCDEFGHIJKLMNOPQRSTUVWXYZ"
-	
+
 	for i := 0; i < 25; i++ {
 		for j := i + 1; j < 26; j++ {
-			pair:=string(rune(alphabet[i]))+string(rune(alphabet[j]))
-			combos=append(combos, pair)
+			pair := string(rune(alphabet[i])) + string(rune(alphabet[j]))
+			combos = append(combos, pair)
 		}
 	}
 
-	return combos;
+	return combos
 }
 
-func orderAndPositionAttack(encodedText string) *AttackPermutationResult{
+func orderAndPositionAttack(encodedText string) *AttackPermutationResult {
 	resultChannel := make(chan *AttackPermutationResult)
 	var bestResults []*AttackPermutationResult
 	for _, order := range machine.PossibleRotarOrders {
@@ -83,7 +108,7 @@ func orderAndPositionAttack(encodedText string) *AttackPermutationResult{
 	return bestResults[0]
 }
 
-func bruteForceOrderAndPositions(text string, order string, resultChannel chan *AttackPermutationResult){
+func bruteForceOrderAndPositions(text string, order string, resultChannel chan *AttackPermutationResult) {
 	results := intializeResultArray()
 	enigma := machine.NewEnigmaMachineRotorOrder(order)
 	for i := 0; i < 26; i++ {
@@ -92,7 +117,7 @@ func bruteForceOrderAndPositions(text string, order string, resultChannel chan *
 			//middle rotor
 			for k := 0; k < 26; k++ {
 				//right rotor
-				enigma.SetRotorPositions(int32(i),int32(j),int32(k))
+				enigma.SetRotorPositions(int32(i), int32(j), int32(k))
 				decodedText := enigma.EncodeDecodeText(text)
 				ioc := CalcIndexOfCooincidence(decodedText)
 				currentWorstIoc := results[9].IOC
@@ -104,7 +129,7 @@ func bruteForceOrderAndPositions(text string, order string, resultChannel chan *
 					rotors[0] = leftRotor
 					rotors[1] = middleRotor
 					rotors[2] = rightRotor
-					results[9] = &AttackPermutationResult{IOC: ioc, Order: order,Rotors: rotors, DecodedText: decodedText}
+					results[9] = &AttackPermutationResult{IOC: ioc, Order: order, Rotors: rotors, DecodedText: decodedText}
 					SortArrayDesc(results[:])
 				}
 			}
@@ -127,8 +152,7 @@ func SortArrayDesc(results []*AttackPermutationResult) {
 	})
 }
 
-
-func printBestResult(bestResults []*AttackPermutationResult){
+func printBestResult(bestResults []*AttackPermutationResult) {
 	fmt.Println("Top Result:")
 	fmt.Printf("IOC: %#v, ", bestResults[0].IOC)
 	fmt.Printf("%+v, ", bestResults[0].Rotors[0])

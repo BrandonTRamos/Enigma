@@ -1,6 +1,7 @@
 package machine
 
 import (
+	"fmt"
 	"strings"
 )
 
@@ -66,22 +67,34 @@ func (e *EngimaMachine) rotateRotars() {
 	e.Right.rotate()
 	if e.Right.RotorPosition == e.Right.RotationPoint {
 		e.Middle.rotate()
-		if(e.Middle.RotorPosition==e.Middle.RotationPoint){
+		if e.Middle.RotorPosition == e.Middle.RotationPoint {
 			e.Left.rotate()
 		}
 	}
 }
-func (e *EngimaMachine) SetRotorPositions(leftPosition int32,middlePosition int32,rightPosition int32){
-				e.Left.RotorPosition = (leftPosition)
-				e.Middle.RotorPosition = (middlePosition)
-				e.Right.RotorPosition = (rightPosition)
+func (e *EngimaMachine) SetRotorPositions(leftPosition int32, middlePosition int32, rightPosition int32) {
+	e.Left.RotorPosition = (leftPosition)
+	e.Middle.RotorPosition = (middlePosition)
+	e.Right.RotorPosition = (rightPosition)
+}
+
+func (e *EngimaMachine) AddPlugboardPair(pair string) {
+	e.PlugBoard.addMappingPair(rune(pair[0]), rune(pair[1]))
+}
+
+func (e *EngimaMachine) RemovePlugboardPair(pair string) {
+	e.PlugBoard.removeMappingPair(rune(pair[0]), rune(pair[1]))
 }
 
 
-
-func (e *EngimaMachine) GenerateNewPlugboardFromSinglePair(pair string){
-	plugboard:=NewPlugBoard()
-	plugboard.addMappingPair(rune(pair[0]),rune(pair[1]))
-	e.PlugBoard=plugboard
+func (e *EngimaMachine) GenerateNewPlugboardFromSinglePair(pair string) {
+	plugboard := NewPlugBoard()
+	plugboard.addMappingPair(rune(pair[0]), rune(pair[1]))
+	e.PlugBoard = plugboard
 }
 
+func (e *EngimaMachine) GeneratePlugBoardFromInitalPairs(pairs string){
+	fmt.Println("Pairs:", pairs)
+	plugBoard:=NewPlugBoardFromPairString(pairs)
+	e.PlugBoard=plugBoard
+}

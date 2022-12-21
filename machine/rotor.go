@@ -18,11 +18,11 @@ func NewRotorFromName(name string) *Rotor {
 	rotor.generateForwardWiring()
 	rotor.generateReverseWiring()
 	return &rotor
-} 
+}
 
-func NewRotorFromNameAndRotorPosition(name string, rotorPosition int32) *Rotor{
-	rotor:= NewRotorFromName(name)
-	rotor.RotorPosition=rotorPosition
+func NewRotorFromNameAndRotorPosition(name string, rotorPosition int32) *Rotor {
+	rotor := NewRotorFromName(name)
+	rotor.RotorPosition = rotorPosition
 	return rotor
 }
 
