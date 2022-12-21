@@ -34,6 +34,10 @@ func (p *PlugBoard) removeMappingPair(firstLetter rune, secondLetter rune) {
 	delete(p.mappings, secondLetter)
 }
 
+func (p *PlugBoard) GetMappings() map[rune]rune {
+	return p.mappings
+}
+
 func (p *PlugBoard) SwapLetter(letter rune) rune {
 	swap, present := p.mappings[letter]
 	if present {

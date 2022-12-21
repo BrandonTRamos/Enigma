@@ -86,15 +86,14 @@ func (e *EngimaMachine) RemovePlugboardPair(pair string) {
 	e.PlugBoard.removeMappingPair(rune(pair[0]), rune(pair[1]))
 }
 
-
 func (e *EngimaMachine) GenerateNewPlugboardFromSinglePair(pair string) {
 	plugboard := NewPlugBoard()
 	plugboard.addMappingPair(rune(pair[0]), rune(pair[1]))
 	e.PlugBoard = plugboard
 }
 
-func (e *EngimaMachine) GeneratePlugBoardFromInitalPairs(pairs string){
+func (e *EngimaMachine) GeneratePlugBoardFromInitalPairs(pairs string) {
 	fmt.Println("Pairs:", pairs)
-	plugBoard:=NewPlugBoardFromPairString(pairs)
-	e.PlugBoard=plugBoard
+	plugBoard := NewPlugBoardFromPairString(pairs)
+	e.PlugBoard = plugBoard
 }
