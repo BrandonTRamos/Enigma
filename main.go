@@ -24,8 +24,13 @@ func main() {
 		bestResults = append(bestResults, result)
 	}
 	close(resultChannel)
-	attack.SortArrayDesc(bestResults)
 
+	attack.SortArrayDesc(bestResults)
+	printBestResult(bestResults)
+
+}
+
+func printBestResult(bestResults []*attack.AttackPermutationResult){
 	fmt.Println("Top Result:")
 	fmt.Printf("IOC: %#v, ", bestResults[0].IOC)
 	fmt.Printf("%+v, ", bestResults[0].Rotors[0])
@@ -33,7 +38,6 @@ func main() {
 	fmt.Printf("%+v\n\n", bestResults[0].Rotors[2])
 	fmt.Println("Decoded Text:")
 	fmt.Println(bestResults[0].DecodedText)
-
 }
 
 func enigmafyText(text string) string {
