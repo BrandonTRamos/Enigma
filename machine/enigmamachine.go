@@ -1,6 +1,8 @@
 package machine
 
-import "strings"
+import (
+	"strings"
+)
 
 const (
 	FirstRotorEncoding  = "EKMFLGDQVZNTOWYHXUSPAIBRCJ"
@@ -29,8 +31,8 @@ func NewEnigmaMachineRotorOrder(rotorOrder string) *EngimaMachine {
 func NewEnigmaMachineTest() *EngimaMachine {
 	enigma := EngimaMachine{Right: NewRotor("I", FirstRotorEncoding, 25, 1, 16), Middle: NewRotor("II", SecondRotorEncoding, 1, 25, 4), Left: NewRotor("III", ThirdRotorEncoding, 1, 13, 21), Reflector: NewReflector()}
 	enigma.PlugBoard = NewPlugBoard()
-	// enigma.PlugBoard.addMappingPair('A', 'Z')
-	// enigma.PlugBoard.addMappingPair('B', 'E')
+	enigma.PlugBoard.addMappingPair('A', 'Z')
+	enigma.PlugBoard.addMappingPair('B', 'E')
 	// enigma.PlugBoard.addMappingPair('C', 'J')
 	// enigma.PlugBoard.addMappingPair('D', 'X')
 	// enigma.PlugBoard.addMappingPair('F', 'Q')
@@ -69,3 +71,17 @@ func (e *EngimaMachine) rotateRotars() {
 		}
 	}
 }
+func (e *EngimaMachine) SetRotorPositions(leftPosition int32,middlePosition int32,rightPosition int32){
+				e.Left.RotorPosition = (leftPosition)
+				e.Middle.RotorPosition = (middlePosition)
+				e.Right.RotorPosition = (rightPosition)
+}
+
+
+
+func (e *EngimaMachine) GenerateNewPlugboardFromSinglePair(pair string){
+	plugboard:=NewPlugBoard()
+	plugboard.addMappingPair(rune(pair[0]),rune(pair[1]))
+	e.PlugBoard=plugboard
+}
+
