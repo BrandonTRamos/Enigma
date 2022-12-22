@@ -13,6 +13,7 @@ func main() {
 	fmt.Println("Running...")
 	encoderEnigma := machine.NewEnigmaMachineTest()
 	encodedText := encoderEnigma.EncodeDecodeText(enigmafyText(plainText))
+	fmt.Println(encodedText)
 	attack.Attack(encodedText)
 }
 

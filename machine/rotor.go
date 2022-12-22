@@ -50,13 +50,17 @@ func (r *Rotor) rotate() {
 
 func (r *Rotor) encodeForward(input int32) int32 {
 
-	offset := (26 + (r.RotorPosition - r.RingSetting)) % 26
-	return r.ForwardWiring[(input+offset)%26]
+	// offset := (26 + (r.RotorPosition - r.RingSetting)) % 26
+	// return r.ForwardWiring[(input+offset)%26]
+	shift:=r.RotorPosition-r.RingSetting
+	return(r.ForwardWiring[(input+shift+26)%26]-shift+26)%26
 }
 
 func (r *Rotor) encodeReverse(input int32) int32 {
-	offset := (26 + (r.RotorPosition - r.RingSetting)) % 26
-	return (26 + (r.ReverseWiring[input]) - offset) % 26
+	// offset := (26 + (r.RotorPosition - r.RingSetting)) % 26
+	// return (26 + (r.ReverseWiring[input]) - offset) % 26
+	shift:=r.RotorPosition-r.RingSetting
+	return(r.ReverseWiring[(input+shift+26)%26]-shift+26)%26
 }
 
 func (r *Rotor) GetCurrentRotorOffset() int32 {

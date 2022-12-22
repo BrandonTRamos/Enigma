@@ -42,6 +42,7 @@ func orderAndPositionAttack(encodedText string) *AttackPermutationResult {
 func bruteForceOrderAndPositions(text string, order string, resultChannel chan *AttackPermutationResult) {
 	results := intializeResultArray()
 	enigma := machine.NewEnigmaMachineRotorOrder(order)
+	//enigma.SetRingSettings(12,12,12)
 	for i := 0; i < 26; i++ {
 		//left rotor
 		for j := 0; j < 26; j++ {

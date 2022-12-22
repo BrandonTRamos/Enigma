@@ -30,10 +30,20 @@ func NewEnigmaMachineRotorOrder(rotorOrder string) *EngimaMachine {
 }
 
 func NewEnigmaMachineTest() *EngimaMachine {
-	enigma := EngimaMachine{Right: NewRotor("I", FirstRotorEncoding, 25, 1, 16), Middle: NewRotor("II", SecondRotorEncoding, 1, 25, 4), Left: NewRotor("III", ThirdRotorEncoding, 1, 13, 21), Reflector: NewReflector()}
+	enigma := EngimaMachine{Right: NewRotor("I", FirstRotorEncoding, 16, 9, 16), Middle: NewRotor("II", SecondRotorEncoding, 16, 9, 4), Left: NewRotor("III", ThirdRotorEncoding, 16, 9, 21), Reflector: NewReflector()}
 	enigma.PlugBoard = NewPlugBoard()
-	enigma.PlugBoard.addMappingPair('A', 'Z')
-	enigma.PlugBoard.addMappingPair('B', 'E')
+	//enigma.PlugBoard.addMappingPair('A', 'Z')
+	// enigma.PlugBoard.addMappingPair('B', 'E')
+	// enigma.PlugBoard.addMappingPair('C', 'J')
+	// enigma.PlugBoard.addMappingPair('D', 'X')
+	// enigma.PlugBoard.addMappingPair('F', 'Q')
+	return &enigma
+}
+func NewEnigmaMachineTest2() *EngimaMachine {
+	enigma := EngimaMachine{Right: NewRotor("I", FirstRotorEncoding, 24, 0, 16), Middle: NewRotor("II", SecondRotorEncoding, 24, 0, 4), Left: NewRotor("III", ThirdRotorEncoding, 23, 0, 21), Reflector: NewReflector()}
+	enigma.PlugBoard = NewPlugBoard()
+	//enigma.PlugBoard.addMappingPair('A', 'Z')
+	// enigma.PlugBoard.addMappingPair('B', 'E')
 	// enigma.PlugBoard.addMappingPair('C', 'J')
 	// enigma.PlugBoard.addMappingPair('D', 'X')
 	// enigma.PlugBoard.addMappingPair('F', 'Q')
@@ -76,6 +86,12 @@ func (e *EngimaMachine) SetRotorPositions(leftPosition int32, middlePosition int
 	e.Left.RotorPosition = (leftPosition)
 	e.Middle.RotorPosition = (middlePosition)
 	e.Right.RotorPosition = (rightPosition)
+}
+
+func (e *EngimaMachine) SetRingSettings(left int32,middle int32, right int32) {
+	e.Left.RingSetting = left
+	e.Middle.RingSetting = middle
+	e.Right.RingSetting = right
 }
 
 func (e *EngimaMachine) AddPlugboardPair(pair string) {
